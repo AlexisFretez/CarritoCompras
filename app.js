@@ -64,6 +64,10 @@ const pintarCarrito = () => {
     template.querySelector("span").textContent =
       producto.precio * producto.cantidad;
 
+    //botones
+    template.querySelector(".btn-info").dataset.id = producto.id;
+    template.querySelector(".btn-danger").dataset.id = producto.id;
+
     const clone = template.cloneNode(true);
     fragment.appendChild(clone);
   });
@@ -111,4 +115,33 @@ const pintarFooter = () => {
     pintarCarrito();
   });
 };
-const accionBotones = () => {};
+const accionBotones = () => {
+  const botonesAgregar = document.querySelectorAll("#items .btn-info");
+  const botonesEliminar = document.querySelectorAll("#items .btn-danger");
+  //boton +
+  botonesAgregar.forEach(btn => {
+    btn.addEventListener("click", () => {
+      console.log("agregarndo");
+
+      const producto = carrito[btn.dataset.id];
+      producto.cantidad++;
+
+      carrito[btn.dataset.id] = { ...producto };
+      pintarCarrito();
+    });
+  });
+
+  botonesEliminar.forEach(btn => {
+    btn.addEventListener("click", () => {
+      console.log("Ekliminabndo");
+      const producto = carrito[btn.dataset.id];
+      producto.cantidad--;
+      if (producto.cantidad === 0) {
+        delete carrito[btn.dataset.id];
+      } else {
+        carrito[btn.dataset.id] = { ...producto };
+      }
+      pintarCarrito();
+    });
+  });
+};
